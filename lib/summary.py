@@ -7,7 +7,9 @@ class MatchSummary:
         self._session = session
 
     def scoreTable(self):
-        return {participant['participantId'] : {'champion': self._session.image_from_champion(f"{participant['championId']}"),
+        return {participant['participantId'] : {
+        'id': participant['participantId'],
+        'champion': self._session.image_from_champion(f"{participant['championId']}"),
         'items': [
             self._session.image_from_item(participant['stats']['item0']),
             self._session.image_from_item(participant['stats']['item1']),
@@ -22,6 +24,7 @@ class MatchSummary:
         'deaths': participant['stats']['deaths'],
         'totalMinionsKilled': participant['stats']['totalMinionsKilled'],
         'goldEarned': participant['stats']['goldEarned'],
+        'lane': f"{participant['timeline']['role']} {participant['timeline']['lane']}",
         'win': participant['stats']['win']
         } for participant in self._match['participants']}
 

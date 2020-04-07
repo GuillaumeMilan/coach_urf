@@ -19,8 +19,26 @@ class SummaryTable:
     def __init__(self, summary):
         self.summary = summary
 
+    def lane_index(self, lane):
+        if lane == "SOLO TOP":
+            return 0
+        if lane == "NONE JUNGLE":
+            return 1
+        if lane == "SOLO MIDDLE":
+            return 2
+        if lane == "DUO_CARRY BOTTOM":
+            return 3
+        if lane == "DUO_SUPPORT BOTTOM":
+            return 4
+        print("[ERROR] Unrecognized position", lane)
+        return 100
+    def sorted_champions(self):
+        champion = [champion for i, champion in self.summary.items()]
+        champion.sort(key=lambda c: self.lane_index(c['lane']))
+        return champion
     def repr_head(self):
         return f"""<thead><tr>
+                <th>Game ID</th>
                 <th>Champion</th>
                 <th></th>
                 <th></th>
@@ -34,9 +52,11 @@ class SummaryTable:
                 <th>A</th>
                 <th>Gold</th>
                 <th>Minions</th>
+                <th>Lane</th>
             </tr></thead>"""
     def repr_row(self, champion):
         return f"""<tr>
+                <td>{champion['id']}</td>
                 <td>{champion['champion']}</td>
                 <td>{champion['items'][0]}</td>
                 <td>{champion['items'][1]}</td>
@@ -50,8 +70,9 @@ class SummaryTable:
                 <td>{champion['assists']}</td>
                 <td>{champion['goldEarned']}</td>
                 <td>{champion['totalMinionsKilled']}</td>
+                <td>{champion['lane']}</td>
             </tr>"""
     def repr_body(self):
-        return f"""<tbody>{''.join([self.repr_row(champion) for id, champion in self.summary.items()])}</tbody>"""
+        return f"""<tbody>{''.join([self.repr_row(champion) for champion in self.sorted_champions()])}</tbody>"""
     def _repr_html_(self):
         return f"""<table>{self.repr_head()}{self.repr_body()}</table>"""
