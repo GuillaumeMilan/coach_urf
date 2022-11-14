@@ -22,19 +22,19 @@ class Session:
         self._summoners_id_dict = utils.dragon.key_as_key(self._summoners)
 
     def patch(self):
-        self._patch
+        return self._patch
     def champions(self):
-        self._champions
+        return self._champions
     def champions_id_dict(self):
-        self._champions_id_dict
+        return self._champions_id_dict
     def items(self):
-        self._items
+        return self._items
     def items_id_dict(self):
-        self._items_id_dict
+        return self._items_id_dict
     def summoners(self):
-        self._summoners
+        return self._summoners
     def summoners_id_dict(self):
-        self._summoners_id_dict
+        return self._summoners_id_dict
 
 
     # Display functions

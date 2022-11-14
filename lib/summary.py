@@ -2,13 +2,46 @@ import utils.html
 import utils.dragon
 
 class MatchSummary:
-    def __init__(self, match, session):
+    def __init__(self, match, session, timeline = None):
         self._match = match
+        self._timeline = timeline
         self._session = session
 
+    def identities_dict(self):
+        return {participant['participantId'] : participant['player'] for participant in self._match['participantIdentities']}
+
+    #def AnalyseJunglePath(self):
+    #    if not self._timeline:
+    #        return {}
+    #    # TODO Analyse jugnle
+    #    # 100 is blue side
+    #    # 200 is red side
+    #    return {
+    #            '100'{
+    #                }
+    #            '200': {
+    #                }
+    #            }
+    def isWinner(self, accountId = None, summonerName = None, summonerId = None, participantId = None):
+        participantId = participantId
+        if accountId:
+            participantId = [p for p in self._match['participantIdentities'] if p['player']['accountId'] == accountId][0]['participantId']
+        if summonerName:
+            participantId = [p for p in self._match['participantIdentities'] if p['player']['summonerName'] == summonerName][0]['participantId']
+        if summonerId:
+            participantId = [p for p in self._match['participantIdentities'] if p['player']['summonerId'] == summonerId][0]['participantId']
+        participant = [p for p in self._match['participants'] if p['participantId'] == participantId][0]
+        team = [t for t in self._match['teams'] if t['teamId'] == participant['teamId']][0]
+        if team['win'] == 'Win':
+            return True
+        return False
+
+
     def scoreTable(self):
+        identities = self.identities_dict()
         return {participant['participantId'] : {
         'id': participant['participantId'],
+        'name': identities[participant['participantId']]['summonerName'],
         'champion': self._session.image_from_champion(f"{participant['championId']}"),
         'items': [
             self._session.image_from_item(participant['stats']['item0']),
@@ -28,6 +61,8 @@ class MatchSummary:
         'win': participant['stats']['win']
         } for participant in self._match['participants']}
 
+    def winners(self):
+        return [i for i, v in self.scoreTable().items() if v['win']]
 
     def _repr_html_(self):
         return f"""

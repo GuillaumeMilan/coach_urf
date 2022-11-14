@@ -21,6 +21,15 @@ def get_champions_list(patch):
         print(f"STATUS: {r.status}")
         return None
 
+def get_champion_full_info(patch, champion_name):
+    r = utils.services.fetch_dragons(f"/cdn/{patch}/data/en_US/champion/{champion_name}.json")
+    if r.status >= 200 and r.status < 400:
+        return json.loads(r.data)
+    else:
+        print(f"STATUS: {r.status}")
+        return None
+
+
 def get_items_list(patch):
     r = utils.services.fetch_dragons(f"/cdn/{patch}/data/en_US/item.json")
     if r.status >= 200 and r.status < 400:

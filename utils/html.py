@@ -39,6 +39,7 @@ class SummaryTable:
     def repr_head(self):
         return f"""<thead><tr>
                 <th>Game ID</th>
+                <th>Name</th>
                 <th>Champion</th>
                 <th></th>
                 <th></th>
@@ -57,6 +58,7 @@ class SummaryTable:
     def repr_row(self, champion):
         return f"""<tr>
                 <td>{champion['id']}</td>
+                <td>{champion['name']}</td>
                 <td>{champion['champion']}</td>
                 <td>{champion['items'][0]}</td>
                 <td>{champion['items'][1]}</td>
